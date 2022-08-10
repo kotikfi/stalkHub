@@ -1,13 +1,23 @@
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { SyntheticEvent, useState } from 'react';
 import { Event } from '../../../app/models/event';
 
 interface Props {
     events: Event[];
     selectEvent: (id: string) => void;
     deleteEvent: (id: string) => void;
+    submitting: boolean;
 }
 
-const EventList = ({ events, selectEvent, deleteEvent }: Props) => {
+const EventList = ({ events, selectEvent, deleteEvent, submitting }: Props) => {
+    const [target, setTarget] = useState('');
+
+    const handleEventDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
+        setTarget(e.currentTarget.name);
+        deleteEvent(id);
+    }
+
     return (
         <>
             {events.map(event => (
@@ -29,8 +39,18 @@ const EventList = ({ events, selectEvent, deleteEvent }: Props) => {
                                 justifyContent='flex-end'
                                 alignItems='flex-end'
                             >
-                                <Button onClick={() => deleteEvent(event.id)} variant='contained' color='error'>Delete</Button>
-                                <Button onClick={() => selectEvent(event.id)} variant='contained'>View</Button>
+                                <LoadingButton
+                                    name={event.id}
+                                    loading={submitting && target === event.id}
+                                    onClick={(e) => handleEventDelete(e, event.id)}
+                                    variant='contained'
+                                    color='error'
+                                >
+                                    Delete
+                                </LoadingButton>
+                                <Button onClick={() => selectEvent(event.id)} variant='contained'>
+                                    View
+                                </Button>
                             </Box>
                         </CardContent>
                     </Card>

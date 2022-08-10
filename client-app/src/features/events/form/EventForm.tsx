@@ -1,3 +1,5 @@
+// import { LoadingButton } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import { Button, Grid, TextField } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Event } from '../../../app/models/event';
@@ -6,9 +8,10 @@ interface Props {
     event: Event | undefined;
     closeForm: () => void;
     createOrEdit: (event: Event) => void;
+    submitting: boolean;
 }
 
-const EventForm = ({ event: selectedActivity, closeForm, createOrEdit }: Props) => {
+const EventForm = ({ event: selectedActivity, closeForm, createOrEdit, submitting }: Props) => {
     const initialState = selectedActivity ?? {
         id: '',
         title: '',
@@ -45,6 +48,7 @@ const EventForm = ({ event: selectedActivity, closeForm, createOrEdit }: Props) 
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        type='date'
                         label='Date'
                         placeholder='Date'
                         fullWidth
@@ -85,9 +89,9 @@ const EventForm = ({ event: selectedActivity, closeForm, createOrEdit }: Props) 
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button type='submit' variant='contained' color='primary'>
+                    <LoadingButton loading={submitting} type='submit' variant='contained' color='primary'>
                         Submit
-                    </Button>
+                    </LoadingButton>
                     <Button onClick={closeForm} variant='contained' color='error'>
                         Cancel
                     </Button>

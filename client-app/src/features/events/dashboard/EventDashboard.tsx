@@ -14,6 +14,7 @@ interface Props {
     closeForm: () => void;
     createOrEdit: (event: Event) => void;
     deleteEvent: (id: string) => void;
+    submitting: boolean;
 }
 
 const EventDashboard = ({
@@ -26,18 +27,31 @@ const EventDashboard = ({
     closeForm,
     createOrEdit,
     deleteEvent,
+    submitting,
 }: Props) => {
     return (
         <Grid container columnSpacing={5}>
             <Grid item xs={12} md={7}>
                 <h1>Events</h1>
-                <EventList events={events} selectEvent={selectEvent} deleteEvent={deleteEvent} />
+                <EventList
+                    events={events}
+                    selectEvent={selectEvent}
+                    deleteEvent={deleteEvent}
+                    submitting={submitting}
+                />
             </Grid>
             <Grid item xs={12} md={5}>
                 {selectedEvent && !editMode && (
                     <EventDetails event={selectedEvent} cancelSelectEvent={cancelSelectEvent} openForm={openForm} />
                 )}
-                {editMode && <EventForm closeForm={closeForm} event={selectedEvent} createOrEdit={createOrEdit} />}
+                {editMode && (
+                    <EventForm
+                        closeForm={closeForm}
+                        event={selectedEvent}
+                        createOrEdit={createOrEdit}
+                        submitting={submitting}
+                    />
+                )}
             </Grid>
         </Grid>
     );
