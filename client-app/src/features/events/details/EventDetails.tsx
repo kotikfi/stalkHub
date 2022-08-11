@@ -1,14 +1,14 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-import React from 'react';
-import { Event } from '../../../app/models/event';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    event: Event;
-    cancelSelectEvent: () => void;
-    openForm: (id: string) => void;
-}
 
-const EventDetails = ({ event, cancelSelectEvent, openForm }: Props) => {
+const EventDetails = () => {
+    const {eventStore} = useStore();
+    const {selectedEvent: event, openForm, cancelSelectedEvent} = eventStore;
+
+    if (!event) return <LoadingComponent />;
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardMedia component='img' height='140' image='/assets/drinks.jpg' alt='green iguana' />
@@ -24,7 +24,7 @@ const EventDetails = ({ event, cancelSelectEvent, openForm }: Props) => {
             </CardContent>
             <CardActions>
                 <Button onClick={() => openForm(event.id)} variant='outlined'>Edit</Button>
-                <Button onClick={() => cancelSelectEvent()} variant='outlined'>Cancel</Button>
+                <Button onClick={() => cancelSelectedEvent()} variant='outlined'>Cancel</Button>
             </CardActions>
         </Card>
     );

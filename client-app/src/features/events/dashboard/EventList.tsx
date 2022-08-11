@@ -1,16 +1,14 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useState } from 'react';
-import { Event } from '../../../app/models/event';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    events: Event[];
-    selectEvent: (id: string) => void;
-    deleteEvent: (id: string) => void;
-    submitting: boolean;
-}
 
-const EventList = ({ events, selectEvent, deleteEvent, submitting }: Props) => {
+const EventList = () => {
+    const {eventStore} = useStore();
+    const {deleteEvent, eventsByDate, loading} = eventStore;
+
     const [target, setTarget] = useState('');
 
     const handleEventDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
@@ -18,10 +16,11 @@ const EventList = ({ events, selectEvent, deleteEvent, submitting }: Props) => {
         deleteEvent(id);
     }
 
+
     return (
         <>
-            {events.map(event => (
-                <CardActionArea key={event.id} component='a' href='#'>
+            {eventsByDate.map(event => (
+                <CardActionArea key={event.id} component='a'>
                     <Card sx={{ display: 'flex', marginY: 2 }}>
                         <CardContent sx={{ flex: 1 }}>
                             <Typography component='h2' variant='h5'>
@@ -41,14 +40,14 @@ const EventList = ({ events, selectEvent, deleteEvent, submitting }: Props) => {
                             >
                                 <LoadingButton
                                     name={event.id}
-                                    loading={submitting && target === event.id}
+                                    loading={loading && target === event.id}
                                     onClick={(e) => handleEventDelete(e, event.id)}
                                     variant='contained'
                                     color='error'
                                 >
                                     Delete
                                 </LoadingButton>
-                                <Button onClick={() => selectEvent(event.id)} variant='contained'>
+                                <Button onClick={() => eventStore.selectEvent(event.id)} variant='contained'>
                                     View
                                 </Button>
                             </Box>
@@ -60,4 +59,4 @@ const EventList = ({ events, selectEvent, deleteEvent, submitting }: Props) => {
     );
 };
 
-export default EventList;
+export default observer(EventList);

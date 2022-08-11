@@ -1,18 +1,16 @@
 // import { LoadingButton } from '@mui/lab';
 import { LoadingButton } from '@mui/lab';
 import { Button, Grid, TextField } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Event } from '../../../app/models/event';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    event: Event | undefined;
-    closeForm: () => void;
-    createOrEdit: (event: Event) => void;
-    submitting: boolean;
-}
 
-const EventForm = ({ event: selectedActivity, closeForm, createOrEdit, submitting }: Props) => {
-    const initialState = selectedActivity ?? {
+const EventForm = () => {
+    const {eventStore} = useStore();
+    const {selectedEvent, closeForm, createEvent, updateEvent, loading} = eventStore;
+
+    const initialState = selectedEvent ?? {
         id: '',
         title: '',
         date: '',
@@ -25,7 +23,7 @@ const EventForm = ({ event: selectedActivity, closeForm, createOrEdit, submittin
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        createOrEdit(event);
+        event.id ? updateEvent(event) : createEvent(event);
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +87,7 @@ const EventForm = ({ event: selectedActivity, closeForm, createOrEdit, submittin
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <LoadingButton loading={submitting} type='submit' variant='contained' color='primary'>
+                    <LoadingButton loading={loading} type='submit' variant='contained' color='primary'>
                         Submit
                     </LoadingButton>
                     <Button onClick={closeForm} variant='contained' color='error'>
@@ -101,4 +99,4 @@ const EventForm = ({ event: selectedActivity, closeForm, createOrEdit, submittin
     );
 };
 
-export default EventForm;
+export default observer(EventForm);

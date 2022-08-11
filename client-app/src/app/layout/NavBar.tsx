@@ -13,15 +13,14 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
-
-interface Props {
-    openForm: () => void;
-}
+import { useStore } from '../stores/store';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const NavBar = ({openForm}: Props) => {
+const NavBar = () => {
+    const { eventStore } = useStore();
+
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -129,7 +128,7 @@ const NavBar = ({openForm}: Props) => {
                             </Button>
                         ))}
                         <Button
-                            onClick={openForm}
+                            onClick={() => eventStore.openForm()}
                             sx={{ my: 2, color: 'white', display: 'block' }}
                             variant='contained'
                             color='success'
