@@ -8,7 +8,7 @@ import { useStore } from '../../../app/stores/store';
 
 const EventForm = () => {
     const {eventStore} = useStore();
-    const {selectedEvent, closeForm, createEvent, updateEvent, loading} = eventStore;
+    const {selectedEvent, createEvent, updateEvent, loading} = eventStore;
 
     const initialState = selectedEvent ?? {
         id: '',
@@ -90,7 +90,7 @@ const EventForm = () => {
                     <LoadingButton loading={loading} type='submit' variant='contained' color='primary'>
                         Submit
                     </LoadingButton>
-                    <Button onClick={closeForm} variant='contained' color='error'>
+                    <Button variant='contained' color='error'>
                         Cancel
                     </Button>
                 </Grid>

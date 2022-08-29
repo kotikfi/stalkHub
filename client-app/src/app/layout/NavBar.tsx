@@ -13,13 +13,12 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { useStore } from '../stores/store';
+import { NavLink } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavBar = () => {
-    const { eventStore } = useStore();
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -102,8 +101,8 @@ const NavBar = () => {
                     <Typography
                         variant='h5'
                         noWrap
-                        component='a'
-                        href=''
+                        component={NavLink}
+                        to='/'
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -118,7 +117,7 @@ const NavBar = () => {
                         stalkHub
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map(page => (
+                        {/* {pages.map(page => (
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
@@ -126,9 +125,13 @@ const NavBar = () => {
                             >
                                 {page}
                             </Button>
-                        ))}
+                        ))} */}
+                        <Button component={NavLink} to='/events' sx={{ my: 2, color: 'white', display: 'block' }}>
+                            Events
+                        </Button>
                         <Button
-                            onClick={() => eventStore.openForm()}
+                            component={NavLink}
+                            to='/createEvent'
                             sx={{ my: 2, color: 'white', display: 'block' }}
                             variant='contained'
                             color='success'

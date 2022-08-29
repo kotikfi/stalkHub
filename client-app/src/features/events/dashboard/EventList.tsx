@@ -2,6 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 
 
@@ -47,7 +48,7 @@ const EventList = () => {
                                 >
                                     Delete
                                 </LoadingButton>
-                                <Button onClick={() => eventStore.selectEvent(event.id)} variant='contained'>
+                                <Button component={Link} to={`/events/${event.id}`} variant='contained'>
                                     View
                                 </Button>
                             </Box>

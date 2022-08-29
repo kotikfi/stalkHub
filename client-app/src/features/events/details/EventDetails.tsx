@@ -1,13 +1,20 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 
-
 const EventDetails = () => {
-    const {eventStore} = useStore();
-    const {selectedEvent: event, openForm, cancelSelectedEvent} = eventStore;
+    const { eventStore } = useStore();
+    const { selectedEvent: event, loadEvent, loadingInitial } = eventStore;
+    const { id } = useParams<{ id: string }>();
 
-    if (!event) return <LoadingComponent />;
+    useEffect(() => {
+        if (id) loadEvent(id);
+    }, [id, loadEvent]);
+
+    if (loadingInitial || !event) return <LoadingComponent />;
 
     return (
         <Card sx={{ maxWidth: 345 }}>
@@ -23,11 +30,15 @@ const EventDetails = () => {
                 <Typography variant='subtitle1'>{event.location}</Typography>
             </CardContent>
             <CardActions>
-                <Button onClick={() => openForm(event.id)} variant='outlined'>Edit</Button>
-                <Button onClick={() => cancelSelectedEvent()} variant='outlined'>Cancel</Button>
+                <Button variant='outlined'>
+                    Edit
+                </Button>
+                <Button variant='outlined'>
+                    Cancel
+                </Button>
             </CardActions>
         </Card>
     );
 };
 
-export default EventDetails;
+export default observer(EventDetails);

@@ -1,13 +1,18 @@
 import { Grid } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
-import EventDetails from '../details/EventDetails';
-import EventForm from '../form/EventForm';
 import EventList from './EventList';
 
 const EventDashboard = () => {
     const { eventStore } = useStore();
-    const { selectedEvent, editMode } = eventStore;
+
+    useEffect(() => {
+        eventStore.loadEvents();
+    }, [eventStore]);
+
+    if (eventStore.loadingInitial) return <LoadingComponent />;
 
     return (
         <Grid container columnSpacing={5}>
@@ -16,8 +21,7 @@ const EventDashboard = () => {
                 <EventList />
             </Grid>
             <Grid item xs={12} md={5}>
-                {selectedEvent && !editMode && <EventDetails />}
-                {editMode && <EventForm />}
+                <h2>Event filters</h2>
             </Grid>
         </Grid>
     );
