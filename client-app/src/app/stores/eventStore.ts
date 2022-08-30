@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import api from '../api/api';
 import { Event } from '../models/event';
-import { v4 as uuid } from 'uuid';
 
 export default class EventStore {
     eventRegistry = new Map<string, Event>();
@@ -36,13 +35,17 @@ export default class EventStore {
         let event = this.getEvent(id);
         if (event) {
             this.selectedEvent = event;
+            return event;
         } else {
             this.loadingInitial = true;
             try {
                 event = await api.Events.details(id);
                 this.setEvent(event);
-                this.selectedEvent = event;
+                runInAction(() => {
+                    this.selectedEvent = event;
+                })
                 this.setLoadingInitial(false);
+                return event;
             } catch (error) {
                 console.log(error);
                 this.setLoadingInitial(false);
@@ -65,7 +68,6 @@ export default class EventStore {
 
     createEvent = async (event: Event) => {
         this.loading = true;
-        event.id = uuid();
 
         try {
             await api.Events.create(event);

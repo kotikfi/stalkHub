@@ -21,7 +21,7 @@ const EventList = () => {
     return (
         <>
             {eventsByDate.map(event => (
-                <CardActionArea key={event.id} component='a'>
+                <CardActionArea key={event.id}>
                     <Card sx={{ display: 'flex', marginY: 2 }}>
                         <CardContent sx={{ flex: 1 }}>
                             <Typography component='h2' variant='h5'>
